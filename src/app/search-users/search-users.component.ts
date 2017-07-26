@@ -16,8 +16,13 @@ export class SearchUsersComponent implements OnInit {
   selectedUser: any;
   error_text: string = "";
  
-  constructor(private searchService: SearchUsersService) {}
-  ngOnInit() {}
+  constructor(private _searchService: SearchUsersService) {}
+  ngOnInit() {
+    // this.activities = this._activityService.getActivities();
+    // this.totalActivities = this._activityService.getTotalActivities(this.activities);
+    // this.totalDistance = this._activityService.getTotalDistance(this.activities);
+    // this.firstDate = this._activityService.getFirstDate(this.activities);    
+  }
  
   search(place: string, language: string) {
     this.selected = false;
@@ -25,7 +30,7 @@ export class SearchUsersComponent implements OnInit {
     if (place || language) {
       this.place = place;
       this.language = language;
-      this.searchService.getUsersByPlaceAndLanguage(place, language).subscribe(
+      this._searchService.getUsersByPlaceAndLanguage(place, language).subscribe(
         users => {
           this.results = users;
         },
@@ -37,17 +42,4 @@ export class SearchUsersComponent implements OnInit {
       )
     }
   }
-
-  getDetails(username: string) {
-    this.searchService.getDetailsByUserName(username).subscribe(
-      userDetails => {
-        this.selectedUser = userDetails;
-        this.selected = true;
-      },
-      error => {
-        this.selected = false;
-        console.error(error);
-      }
-    )
-  }  
 }
