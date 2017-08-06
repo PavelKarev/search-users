@@ -36,6 +36,7 @@ export class SearchUsersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.reset();
     this.search();
   }
 
@@ -49,6 +50,7 @@ export class SearchUsersComponent implements OnInit {
         this.page = params['page'];
         this.per_page = params['per_page'];
         this.pageIndex = this.page - 1;
+        this.error_text = false;
         
         this._searchService.getUsers(this.placeText, this.languageText, this.page, this.per_page).subscribe(
           body => {
@@ -59,6 +61,7 @@ export class SearchUsersComponent implements OnInit {
           },
           error => {
             this.emptyText = "Sorry! No Users found. Try again";
+            this.reset();
             console.error(error);
             return true;
           }
@@ -70,7 +73,9 @@ export class SearchUsersComponent implements OnInit {
   }
 
   searchRoute(place: string, language: string, page: number, per_page: number){
-    this._router.navigate(['/search'], { queryParams: { place: place, language: language, page: page, per_page: per_page } });
+    if (place || language) {
+      this._router.navigate(['/search'], { queryParams: { place: place, language: language, page: page, per_page: per_page } });
+    }
   }
 
   reset() {
@@ -84,6 +89,5 @@ export class SearchUsersComponent implements OnInit {
   pager(event) {
     this.pageEvent = event;
     this.searchRoute(this.placeText, this.languageText, event.pageIndex + 1, event.pageSize);
-    console.log('nextPage', event);
   }
 }
